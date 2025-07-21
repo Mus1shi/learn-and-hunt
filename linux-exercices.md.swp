@@ -1,0 +1,80 @@
+          # Review Linux - 21/07/2025
+
+
+##Commands : Connections and identities
+
+-who: displays users currently logged into the session (useful foridentifying suspicious connections).
+
+result:
+         tommy    pts/1        2025-07-21 15:13
+
+-w: Show connected users, how long they've been logged in, and what they are doing (help detect an inactive session or a strange command).
+
+result:
+          15:21:36 up 8 min,  1 user,  load average: 0.04, 0.01, 0.00
+          USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU  WHAT
+          tommy    pts/1    -                15:13    8:10   0.04s  0.04s -zsh
+
+-id: Shows the UID (User id), GID (Group id), and the groups of a user (Useful for checking privileges).
+
+result:
+       uid=1000(tommy) gid=1000(tommy) groups=1000(tommy),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),100(users)
+
+-groups: Lists the groups a user belong to (Helps determine if a user is in sudo, admin, etc).
+
+result:
+        tommy adm cdrom sudo dip plugdev users
+
+##System processes
+
+-ps: Display the active processes in the current terminal session (Useful for seeing what the user is executing manually).
+
+ result :
+             PID TTY          TIME CMD
+             569 pts/2    00:00:00 zsh
+             783 pts/2    00:00:00 ps
+
+-ps aux: Show all the processes on the system (including root, daemons, etc).
+ Used to detect : suspicious processes, unexpected services, programs consumming abnormal amounts of memory or CPU.
+
+ result:
+          
+           USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.0  21764 11840 ?        Ss   15:13   0:00 /sbin/init
+root           2  0.0  0.0   3060  1760 ?        Sl   15:13   0:00 /init
+root           6  0.0  0.0   3076  1820 ?        Sl   15:13   0:00 plan9 --control-socket 7 --log-level 4 --server-fd 8 --pipe-fd 10 --log-truncate
+root          52  0.0  0.1  66828 16796 ?        S<s  15:13   0:00 /usr/lib/systemd/systemd-journald
+root          97  0.0  0.0  25236  6560 ?        Ss   15:13   0:00 /usr/lib/systemd/systemd-udevd
+systemd+     182  0.0  0.0  21452 12800 ?        Ss   15:13   0:00 /usr/lib/systemd/systemd-resolved
+systemd+     186  0.0  0.0  91020  7520 ?        Ssl  15:13   0:00 /usr/lib/systemd/systemd-timesyncd
+root         195  0.0  0.0   4236  2400 ?        Ss   15:13   0:00 /usr/sbin/cron -f -P
+message+     196  0.0  0.0   9636  4800 ?        Ss   15:13   0:00 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslogroot         210  0.0  0.0  17964  8000 ?        Ss   15:13   0:00 /usr/lib/systemd/systemd-logind
+root         213  0.0  0.0 1756096 12160 ?       Ssl  15:13   0:00 /usr/libexec/wsl-pro-service -v
+vsyslog       229  0.0  0.0 222508  5280 ?        Ssl  15:13   0:00 /usr/sbin/rsyslogd -n -iNONE
+...
+...
+
+-top: Real-time view of processes and their ressource usage (CPU, RAM, Status).
+ UYseful for : Identifying high ressource usage processes, checking if the system is "overloaded", spotting zombie or stopped processes.
+
+ result:
+
+top - 15:43:46 up 30 min,  1 user,  load average: 0.00, 0.00, 0.00
+Tasks:  48 total,   1 running,  47 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  15861.2 total,  15275.1 free,    622.1 used,    162.3 buff/cache
+MiB Swap:   4096.0 total,   4096.0 free,      0.0 used.  15239.0 avail Mem
+Which user (blank for all)
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   21764  11840   8960 S   0.0   0.1   0:00.57 systemd
+      2 root      20   0    3060   1760   1760 S   0.0   0.0   0:00.00 init-systemd(Ub
+      6 root      20   0    3076   1820   1760 S   0.0   0.0   0:00.00 init
+     52 root      19  -1   66828  16796  15836 S   0.0   0.1   0:00.20 systemd-journal
+     97 root      20   0   25236   6560   4960 S   0.0   0.0   0:00.14 systemd-udevd
+    182 systemd+  20   0   21452  12800  10560 S   0.0   0.1   0:00.10 systemd-resolve
+    186 systemd+  20   0   91020   7520   6720 S   0.0   0.0   0:00.10 systemd-timesyn
+    195 root      20   0    4236   2400   2240 S   0.0   0.0   0:00.00 cron
+    196 message+  20   0    9636   4800   4320 S   0.0   0.0   0:00.07 dbus-daemon
+    210 root      20   0   17964   8000   7200 S   0.0   0.0   0:00.07 systemd-logind
+ ...
+ ...
