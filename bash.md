@@ -20,3 +20,9 @@ fi
 STRING="this is a string"
 SUBSTRING="hat"
 expr index "$STRING" "$SUBSTRING"     # 1 is the position of the first 't' in $STRING
+
+
+STRING="this is a string"
+POS=1
+LEN=3
+echo ${STRING:$POS:$LEN}
